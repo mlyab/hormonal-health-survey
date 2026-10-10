@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Understanding your hormones — a 3-minute survey</title>
+<meta name="description" content="A 3-minute anonymous survey about hormones, cycles and mental health, to shape an app built around keeping your data on your phone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --mist: #F1F4F3;
+    --surface: #FFFFFF;
+    --ink: #1B2432;
+    --muted: #5E6974;
+    --line: #D3DBD8;
+    --teal: #146C6B;
+    --teal-ink: #0E5251;
+    --teal-tint: #DCEFEA;
+    --amber: #E0A43C;
+    --error: #B3261E;
+    --error-tint: #FBECEA;
+    --focus: #146C6B;
+    --radius: 10px;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --mist: #121922; --surface: #1A2330; --ink: #E9EDF0; --muted: #A2ACB6;
+      --line: #35414D; --teal: #4FB5AC; --teal-ink: #7CCFC7; --teal-tint: #1D3A3A;
+      --amber: #E7B85E; --error: #F28B82; --error-tint: #3A2422; --focus: #4FB5AC;
+    }
+  }
+  :root[data-theme="dark"] {
+    --mist: #121922; --surface: #1A2330; --ink: #E9EDF0; --muted: #A2ACB6;
+    --line: #35414D; --teal: #4FB5AC; --teal-ink: #7CCFC7; --teal-tint: #1D3A3A;
+    --amber: #E7B85E; --error: #F28B82; --error-tint: #3A2422; --focus: #4FB5AC;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *, *::before, *::after { box-sizing: inherit; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--mist);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .app { max-width: 600px; margin: 0 auto; padding: 24px 20px 120px; }
+
+  /* Header + cycle curve */
+  header { margin-bottom: 8px; }
+  .kicker { color: var(--muted); font-size: 15px; margin: 0 0 6px; }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 0 0 18px;
+    font-variation-settings: "opsz" 40;
+  }
+  .curve-wrap { margin: 6px 0 2px; }
+  .curve { display: block; width: 100%; height: auto; overflow: visible; }
+  .curve .track { fill: none; stroke: var(--line); stroke-width: 1; }
+  .curve .estrogen { fill: none; stroke: var(--teal); stroke-width: 2.25; stroke-linecap: round; }
+  .curve .progesterone { fill: none; stroke: var(--amber); stroke-width: 2.25; stroke-linecap: round; stroke-dasharray: 1 0; }
+  .curve .stop { fill: var(--mist); stroke: var(--line); stroke-width: 1.5; }
+  .curve .stop.done { fill: var(--teal); stroke: var(--teal); }
+  .curve .marker { fill: var(--surface); stroke: var(--teal); stroke-width: 3; transition: cx .45s cubic-bezier(.4,0,.2,1), cy .45s cubic-bezier(.4,0,.2,1); }
+  .curve .marker-core { fill: var(--teal); transition: cx .45s cubic-bezier(.4,0,.2,1), cy .45s cubic-bezier(.4,0,.2,1); }
+  @media (prefers-reduced-motion: reduce) { .curve .marker, .curve .marker-core { transition: none; } }
+  .legend { display: flex; gap: 18px; color: var(--muted); font-size: 13.5px; margin: 4px 0 0; }
+  .legend span::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin: 0 7px 3px 0; }
+  .legend .e::before { background: var(--teal); }
+  .legend .p::before { background: var(--amber); }
+  .step-label { color: var(--muted); font-size: 14px; margin: 14px 0 0; }
+
+  /* Sections */
+  section[hidden] { display: none; }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 27px;
+    line-height: 1.18;
+    margin: 26px 0 6px;
+    font-variation-settings: "opsz" 32;
+  }
+  .lead { color: var(--muted); margin: 0 0 8px; }
+  .note {
+    border-left: 3px solid var(--amber);
+    padding: 4px 0 4px 16px;
+    margin: 18px 0 8px;
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.45;
+    font-variation-settings: "opsz" 20;
+  }
+  .q { margin: 30px 0 0; }
+  .q-label { font-weight: 500; font-size: 17.5px; margin: 0 0 4px; }
+  .q-help { color: var(--muted); font-size: 14.5px; margin: 0 0 8px; }
+  .q.missing .q-label { color: var(--error); }
+  .q .err { display: none; color: var(--error); font-size: 14.5px; margin: 8px 0 0; }
+  .q.missing .err { display: block; }
+
+  .opts { margin-top: 10px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; text-align: left;
+    font: inherit; color: var(--ink);
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 13px 16px;
+    margin-top: 8px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .opt:first-child { margin-top: 0; }
+  .opt .box {
+    flex: 0 0 auto; width: 20px; height: 20px; border-radius: 50%;
+    border: 1.5px solid var(--line); background: transparent; position: relative;
+  }
+  .opt.multi .box { border-radius: 5px; }
+  .opt[aria-pressed="true"] { border-color: var(--teal); background: var(--teal-tint); }
+  .opt[aria-pressed="true"] .box { border-color: var(--teal); background: var(--teal); }
+  .opt[aria-pressed="true"] .box::after {
+    content: ""; position: absolute; left: 6px; top: 2.5px; width: 5px; height: 10px;
+    border: solid var(--surface); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .opt:focus-visible, .seg button:focus-visible, .scale button:focus-visible,
+  button.primary:focus-visible, button.ghost:focus-visible, textarea:focus-visible, input:focus-visible, .check:focus-within {
+    outline: 3px solid var(--focus); outline-offset: 2px;
+  }
+
+  .scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
+  .scale button {
+    font: inherit; font-weight: 500; font-size: 18px; color: var(--ink);
+    background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius);
+    padding: 14px 0; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .scale button[aria-pressed="true"] { border-color: var(--teal); background: var(--teal); color: #fff; }
+  .scale-ends { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+  .grid-row { margin-top: 14px; }
+  .grid-row .row-label { font-size: 16px; margin-bottom: 7px; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg button {
+    font: inherit; font-size: 15px; color: var(--ink);
+    background: var(--surface); border: 1.5px solid var(--line); border-radius: 999px;
+    padding: 8px 14px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .seg button[aria-pressed="true"] { border-color: var(--teal); background: var(--teal); color: #fff; }
+  .grid-row.missing .row-label { color: var(--error); }
+
+  textarea, input[type="email"] {
+    width: 100%; font: inherit; color: var(--ink);
+    background: var(--surface); border: 1.5px solid var(--line); border-radius: var(--radius);
+    padding: 13px 16px; margin-top: 10px;
+  }
+  textarea { min-height: 110px; resize: vertical; }
+  .check { display: flex; gap: 12px; align-items: flex-start; margin-top: 18px; cursor: pointer; }
+  .check input { width: 20px; height: 20px; margin: 3px 0 0; accent-color: var(--teal); flex: 0 0 auto; }
+  .fine { color: var(--muted); font-size: 14px; margin-top: 22px; }
+
+  /* Sticky nav */
+  nav.bar {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: color-mix(in srgb, var(--mist) 88%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line);
+    padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+  nav.bar .inner { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; align-items: center; }
+  button.primary {
+    flex: 1; font: inherit; font-weight: 600; font-size: 17px; color: #fff;
+    background: var(--teal); border: 0; border-radius: var(--radius); padding: 15px 18px; cursor: pointer;
+  }
+  button.primary:disabled { opacity: .6; cursor: wait; }
+  button.ghost {
+    font: inherit; font-weight: 500; font-size: 16px; color: var(--ink);
+    background: transparent; border: 1.5px solid var(--line); border-radius: var(--radius); padding: 14px 16px; cursor: pointer;
+  }
+  .count { color: var(--muted); font-size: 14px; white-space: nowrap; }
+
+  /* Preview + done */
+  .banner {
+    background: var(--amber); color: #1B2432; font-size: 14.5px; font-weight: 500;
+    padding: 10px 14px; border-radius: 8px; margin: 0 0 18px;
+  }
+  .done h2 { font-size: 36px; margin-top: 40px; }
+  .done p { max-width: 46ch; }
+  .share { display: flex; gap: 10px; align-items: center; margin-top: 18px; flex-wrap: wrap; }
+  .toast { color: var(--teal-ink); font-size: 15px; }
+  .status { color: var(--error); margin-top: 14px; display: none; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <p class="kicker">About 3 minutes, anonymous, 18 and over</p>
+    <h1>What do your hormones do to you, and does anyone take it seriously?</h1>
+    <div id="preview-banner" class="banner" hidden>Preview — answers are not being recorded on this link.</div>
+    <div class="curve-wrap" aria-hidden="true">
+      <svg class="curve" viewBox="0 0 600 92" id="curve">
+        <path class="track" d="M0 76 H600"/>
+        <path class="progesterone" d="M0 70 C110 70 220 70 300 40 S420 12 470 36 S560 74 600 74"/>
+        <path class="estrogen" id="estrogenPath" d="M0 64 C70 64 120 60 160 22 S215 66 250 60 S320 32 380 36 S500 68 600 70"/>
+        <g id="stops"></g>
+        <circle class="marker" id="marker" r="9" cx="0" cy="64"/>
+        <circle class="marker-core" id="markerCore" r="3.5" cx="0" cy="64"/>
+      </svg>
+      <div class="legend"><span class="e">estrogen</span><span class="p">progesterone</span></div>
+    </div>
+    <p class="step-label" id="stepLabel"></p>
+  </header>
+
+  <main id="main" aria-live="polite"></main>
+</div>
+
+<nav class="bar" id="nav">
+  <div class="inner">
+    <button class="ghost" id="back" type="button">Back</button>
+    <button class="primary" id="next" type="button">Continue</button>
+    <span class="count" id="count"></span>
+  </div>
+</nav>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// WHERE THE ANSWERS GO
+// Paste your Google Apps Script web-app URL (see README) or a Formspree form URL.
+// Leave empty to run in preview mode (nothing is recorded, a banner says so).
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbwmVyUmVyeFLize5mN0ymiLvN67npWZRXPBdTtPUEb8F0JstXtc2eKM5eKgREpAZ1LX/exec";
+// ─────────────────────────────────────────────────────────────────────────────
+
+const SECTIONS = [
+  { id: "about", title: "About you", lead: "Three quick ones so we can read the rest in context.", questions: [
+    { id: "age", type: "single", label: "How old are you?",
+      options: ["18 to 24", "25 to 34", "35 to 44", "45 to 54", "55 or over"] },
+    { id: "wearable", type: "single", label: "Do you wear a smartwatch, ring or fitness tracker?",
+      options: ["No", "Apple Watch", "Oura ring", "Garmin", "Fitbit", "Whoop", "Samsung Galaxy Watch", "Another one"] },
+    { id: "situation", type: "single", label: "What best describes your situation right now?",
+      options: ["Employed full-time", "Employed part-time", "Student", "Self-employed or freelance", "Between jobs or other"] },
+  ]},
+  { id: "today", title: "Your hormones today", lead: "There are no wrong answers. Go with your gut.", questions: [
+    { id: "understanding", type: "scale", label: "How well do you feel you understand what your hormones do to your body and mood across a cycle?",
+      ends: ["Not at all", "Very well"] },
+    { id: "symptoms", type: "multi", label: "In the last 12 months, which of these have you experienced and wondered whether it was normal?", help: "Pick as many as apply.", exclusive: "None of these",
+      options: ["Period pain that disrupts your day", "Mood swings or irritability in the days before your period", "Anxiety or low mood that comes and goes with your cycle", "Heavy fatigue", "Irregular, missing or very heavy periods", "Sleep that changes around your period", "Brain fog or trouble concentrating", "None of these"] },
+    { id: "cond", type: "grid", label: "For each of these, where do you stand?",
+      rows: [["pcos", "PCOS"], ["endo", "Endometriosis"], ["pmdd", "PMDD (severe premenstrual mood symptoms)"], ["thyroid", "A thyroid condition"], ["perimenopause", "Perimenopause"]],
+      cols: ["Diagnosed", "I suspect it", "No", "Rather not say"] },
+    { id: "time_to_answer", type: "single", label: "If you've sought care for cycle-related symptoms, how long did it take to get a clear answer?",
+      options: ["Under 6 months", "6 to 12 months", "1 to 3 years", "More than 3 years", "I still don't have one", "I haven't sought care"] },
+    { id: "taken_seriously", type: "single", label: "Did you feel a clinician took your symptoms seriously?",
+      options: ["Yes", "Partly", "No", "I haven't seen one about this"] },
+  ]},
+  { id: "impact", title: "The impact", lead: "The part that usually goes unsaid.", questions: [
+    { id: "impact", type: "grid", label: "How much do hormonal or cycle-related symptoms affect each of these?",
+      rows: [["work", "Work or studies"], ["mental", "Mental health"], ["relationships", "Relationships"], ["sleep", "Sleep"]],
+      cols: ["Not at all", "A little", "Moderately", "A lot", "I've missed days"] },
+    { id: "mind_link", type: "single", label: "Have you ever connected a change in your mental health — anxiety, low mood, irritability — to where you were in your cycle?",
+      options: ["Yes, clearly", "I suspect so", "No", "I've never thought about it"] },
+  ]},
+  { id: "idea", title: "The idea", lead: "Here's what we're building. Then tell us honestly what you think.", note: "An app that uses the wearable you already own to teach you your own hormonal pattern, shows you how it affects your body and your mind, and tells you when a symptom is no longer normal and worth a doctor's attention. Everything is computed on your phone: your data never goes to a server. Employers could offer it as a benefit without seeing anything about anyone.", questions: [
+    { id: "would_use", type: "single", label: "Would you use it?",
+      options: ["Definitely", "Probably", "Maybe", "Probably not", "No"] },
+    { id: "top_two", type: "multi", max: 2, label: "Which two of these matter most to you?", help: "Pick up to two.",
+      options: ["Understanding my own hormonal pattern", "Knowing when a symptom isn't normal", "Mental-health support tied to my cycle", "A report my doctor will take seriously", "Working with the wearable I already have", "My data never leaving my phone"] },
+    { id: "data_on_phone", type: "scale", label: "How important is it that your health data stays on your phone and is never sent to a server?",
+      ends: ["Don't mind", "Deal-breaker"] },
+    { id: "privacy_stopped", type: "single", label: "Has worry about where your data goes ever stopped you from using a period or health app?",
+      options: ["Yes", "No", "Not sure"] },
+    { id: "employer", type: "single", label: "If your employer paid for it and could never see any individual data, would you use it?",
+      options: ["Yes", "Only if I'm certain the employer sees nothing", "No, I'd rather pay for it myself", "No"] },
+    { id: "pay", type: "single", label: "What would you pay per month if you paid yourself?",
+      options: ["Nothing", "Under $5", "$5 to $10", "$10 to $20", "More than $20"] },
+  ]},
+  { id: "last", title: "Last thing", lead: "Both optional. Both useful.", questions: [
+    { id: "hope_fear", type: "text", label: "What's your biggest hope, or biggest worry, about an app like this?", optional: true },
+    { id: "email", type: "email", label: "Leave your email if you'd like early access", optional: true },
+    { id: "hr_contact", type: "check", label: "I work in HR, benefits or people ops and would take a 10-minute call", optional: true },
+  ]},
+];
+
+const STORE_KEY = "hormone-survey-draft-v1";
+let answers = {};
+let startedAt = Date.now();
+let step = 0;
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) { const d = JSON.parse(raw); answers = d.answers || {}; startedAt = d.startedAt || startedAt; step = Math.min(d.step || 0, SECTIONS.length - 1); }
+  } catch (e) {}
+}
+function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify({ answers, startedAt, step })); } catch (e) {} }
+
+// ── Curve / progress ─────────────────────────────────────────────────────────
+const estrogenPath = document.getElementById("estrogenPath");
+const stopsG = document.getElementById("stops");
+const total = estrogenPath.getTotalLength();
+function pointAt(i) { const t = SECTIONS.length === 1 ? 0 : i / (SECTIONS.length - 1); return estrogenPath.getPointAtLength(total * (0.04 + 0.92 * t)); }
+function drawStops() {
+  stopsG.innerHTML = "";
+  SECTIONS.forEach((s, i) => {
+    const p = pointAt(i);
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute("r", "4.5"); c.setAttribute("cx", p.x); c.setAttribute("cy", p.y);
+    c.setAttribute("class", "stop" + (i < step ? " done" : ""));
+    stopsG.appendChild(c);
+  });
+}
+function moveMarker(done) {
+  const p = done ? estrogenPath.getPointAtLength(total * 0.985) : pointAt(step);
+  for (const id of ["marker", "markerCore"]) { const el = document.getElementById(id); el.setAttribute("cx", p.x); el.setAttribute("cy", p.y); }
+}
+
+// ── Rendering ────────────────────────────────────────────────────────────────
+const main = document.getElementById("main");
+const stepLabel = document.getElementById("stepLabel");
+const countEl = document.getElementById("count");
+const nextBtn = document.getElementById("next");
+const backBtn = document.getElementById("back");
+const nav = document.getElementById("nav");
+
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+function renderSection() {
+  const s = SECTIONS[step];
+  main.innerHTML = "";
+  const sec = el("section");
+  sec.appendChild(el("h2", null, s.title));
+  if (s.lead) sec.appendChild(el("p", "lead", s.lead));
+  if (s.note) sec.appendChild(el("p", "note", s.note));
+  s.questions.forEach(q => sec.appendChild(renderQuestion(q)));
+  if (s.id === "last") sec.appendChild(el("p", "fine", "By sending, you agree we can use your anonymous answers to shape the product. Your email is only used to contact you about early access."));
+  main.appendChild(sec);
+  stepLabel.textContent = `${s.title} — part ${step + 1} of ${SECTIONS.length}`;
+  countEl.textContent = `${step + 1} / ${SECTIONS.length}`;
+  backBtn.style.visibility = step === 0 ? "hidden" : "visible";
+  nextBtn.textContent = step === SECTIONS.length - 1 ? "Send my answers" : "Continue";
+  drawStops(); moveMarker(false);
+  window.scrollTo({ top: 0, behavior: "auto" });
+  save();
+}
+
+function renderQuestion(q) {
+  const wrap = el("div", "q"); wrap.dataset.q = q.id;
+  const label = el("p", "q-label", q.label); wrap.appendChild(label);
+  if (q.help) wrap.appendChild(el("p", "q-help", q.help));
+
+  if (q.type === "single" || q.type === "multi") {
+    const opts = el("div", "opts");
+    q.options.forEach(o => {
+      const b = el("button", "opt" + (q.type === "multi" ? " multi" : "")); b.type = "button";
+      b.appendChild(el("span", "box")); b.appendChild(el("span", null, o));
+      const selected = q.type === "single" ? answers[q.id] === o : (answers[q.id] || []).includes(o);
+      b.setAttribute("aria-pressed", selected ? "true" : "false");
+      b.addEventListener("click", () => {
+        if (q.type === "single") { answers[q.id] = o; }
+        else {
+          let cur = answers[q.id] || [];
+          if (cur.includes(o)) cur = cur.filter(x => x !== o);
+          else {
+            if (q.exclusive && o === q.exclusive) cur = [o];
+            else { cur = cur.filter(x => x !== q.exclusive); if (q.max && cur.length >= q.max) cur = cur.slice(cur.length - q.max + 1); cur.push(o); }
+          }
+          answers[q.id] = cur;
+        }
+        opts.querySelectorAll(".opt").forEach(btn => {
+          const v = btn.lastChild.textContent;
+          btn.setAttribute("aria-pressed", q.type === "single" ? String(answers[q.id] === v) : String((answers[q.id] || []).includes(v)));
+        });
+        wrap.classList.remove("missing"); save();
+      });
+      opts.appendChild(b);
+    });
+    wrap.appendChild(opts);
+  }
+
+  if (q.type === "scale") {
+    const row = el("div", "scale");
+    for (let i = 1; i <= 5; i++) {
+      const b = el("button", null, String(i)); b.type = "button";
+      b.setAttribute("aria-pressed", answers[q.id] === i ? "true" : "false");
+      b.setAttribute("aria-label", `${i} of 5`);
+      b.addEventListener("click", () => {
+        answers[q.id] = i;
+        row.querySelectorAll("button").forEach((btn, idx) => btn.setAttribute("aria-pressed", String(idx + 1 === i)));
+        wrap.classList.remove("missing"); save();
+      });
+      row.appendChild(b);
+    }
+    wrap.appendChild(row);
+    const ends = el("div", "scale-ends"); ends.appendChild(el("span", null, q.ends[0])); ends.appendChild(el("span", null, q.ends[1]));
+    wrap.appendChild(ends);
+  }
+
+  if (q.type === "grid") {
+    q.rows.forEach(([rid, rlabel]) => {
+      const key = `${q.id}_${rid}`;
+      const row = el("div", "grid-row"); row.dataset.key = key;
+      row.appendChild(el("div", "row-label", rlabel));
+      const seg = el("div", "seg");
+      q.cols.forEach(c => {
+        const b = el("button", null, c); b.type = "button";
+        b.setAttribute("aria-pressed", answers[key] === c ? "true" : "false");
+        b.addEventListener("click", () => {
+          answers[key] = c;
+          seg.querySelectorAll("button").forEach(btn => btn.setAttribute("aria-pressed", String(btn.textContent === c)));
+          row.classList.remove("missing"); wrap.classList.remove("missing"); save();
+        });
+        seg.appendChild(b);
+      });
+      row.appendChild(seg); wrap.appendChild(row);
+    });
+  }
+
+  if (q.type === "text") {
+    const t = el("textarea"); t.placeholder = "Write as little or as much as you like"; t.value = answers[q.id] || "";
+    t.addEventListener("input", () => { answers[q.id] = t.value; save(); });
+    wrap.appendChild(t);
+  }
+  if (q.type === "email") {
+    const i = el("input"); i.type = "email"; i.placeholder = "you@example.com"; i.autocomplete = "email"; i.value = answers[q.id] || "";
+    i.addEventListener("input", () => { answers[q.id] = i.value.trim(); wrap.classList.remove("missing"); save(); });
+    wrap.appendChild(i);
+    label.textContent = q.label;
+  }
+  if (q.type === "check") {
+    wrap.classList.remove("q"); wrap.className = "q";
+    label.remove();
+    const l = el("label", "check"); const c = el("input"); c.type = "checkbox"; c.checked = !!answers[q.id];
+    c.addEventListener("change", () => { answers[q.id] = c.checked; save(); });
+    l.appendChild(c); l.appendChild(el("span", null, q.label)); wrap.appendChild(l);
+  }
+
+  wrap.appendChild(el("p", "err", q.type === "grid" ? "Answer each row to continue." : q.type === "email" ? "That doesn't look like an email address." : q.type === "multi" ? "Pick at least one to continue." : "Pick one to continue."));
+  return wrap;
+}
+
+// ── Validation ───────────────────────────────────────────────────────────────
+function validate() {
+  const s = SECTIONS[step]; let firstBad = null;
+  s.questions.forEach(q => {
+    const wrap = main.querySelector(`.q[data-q="${q.id}"]`); let bad = false;
+    if (q.type === "single" || q.type === "scale") bad = answers[q.id] == null;
+    if (q.type === "multi") bad = !(answers[q.id] || []).length;
+    if (q.type === "grid") {
+      q.rows.forEach(([rid]) => { const key = `${q.id}_${rid}`; const r = wrap.querySelector(`.grid-row[data-key="${key}"]`); const rb = answers[key] == null; r.classList.toggle("missing", rb); if (rb) bad = true; });
+    }
+    if (q.type === "email") { const v = (answers[q.id] || "").trim(); bad = v !== "" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    wrap.classList.toggle("missing", bad);
+    if (bad && !firstBad) firstBad = wrap;
+  });
+  if (firstBad) firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
+  return !firstBad;
+}
+
+// ── Submit ───────────────────────────────────────────────────────────────────
+function payload() {
+  const p = { submitted_at: new Date().toISOString(), duration_seconds: Math.round((Date.now() - startedAt) / 1000), page: location.href.split("?")[0] };
+  SECTIONS.forEach(s => s.questions.forEach(q => {
+    if (q.type === "grid") q.rows.forEach(([rid]) => { p[`${q.id}_${rid}`] = answers[`${q.id}_${rid}`] ?? ""; });
+    else if (q.type === "multi") p[q.id] = (answers[q.id] || []).join("; ");
+    else if (q.type === "check") p[q.id] = answers[q.id] ? "yes" : "no";
+    else p[q.id] = answers[q.id] ?? "";
+  }));
+  return p;
+}
+
+async function submit() {
+  nextBtn.disabled = true; nextBtn.textContent = "Sending…";
+  const data = payload();
+  try {
+    if (!ENDPOINT) { /* preview mode */ }
+    else if (/formspree\.io/.test(ENDPOINT)) {
+      const r = await fetch(ENDPOINT, { method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      if (!r.ok) throw new Error("Formspree rejected the submission");
+    } else {
+      // Google Apps Script web app: opaque response by design (no-cors), delivery is reliable.
+      await fetch(ENDPOINT, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(data) });
+    }
+    try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+    renderDone(data.duration_seconds);
+  } catch (err) {
+    nextBtn.disabled = false; nextBtn.textContent = "Send my answers";
+    let st = main.querySelector(".status");
+    if (!st) { st = el("p", "status"); main.firstChild.appendChild(st); }
+    st.style.display = "block";
+    st.textContent = "Your answers didn't go through. Check your connection and press Send again — nothing you typed is lost.";
+  }
+}
+
+function renderDone(seconds) {
+  nav.hidden = true;
+  main.innerHTML = "";
+  const d = el("section", "done");
+  d.appendChild(el("h2", null, ENDPOINT ? "Sent. Thank you." : "Preview complete."));
+  const m = Math.max(1, Math.round(seconds / 60));
+  d.appendChild(el("p", null, ENDPOINT
+    ? `That took you about ${m} minute${m > 1 ? "s" : ""}. Every answer here goes straight into what we build next.`
+    : "This link runs in preview mode, so nothing was recorded. Set an endpoint in the page to start collecting."));
+  const p2 = el("p", null, "If someone you know has ever been told their symptoms were \"just hormones\", they're exactly who we want to hear from.");
+  d.appendChild(p2);
+  const share = el("div", "share");
+  const b = el("button", "ghost", "Copy the link"); b.type = "button";
+  const t = el("span", "toast", "");
+  b.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(location.href.split("?")[0]); t.textContent = "Copied."; }
+    catch (e) { t.textContent = location.href.split("?")[0]; }
+  });
+  share.appendChild(b); share.appendChild(t); d.appendChild(share);
+  main.appendChild(d);
+  stepLabel.textContent = "Done";
+  drawStops(); moveMarker(true);
+  window.scrollTo({ top: 0 });
+}
+
+// ── Wire up ──────────────────────────────────────────────────────────────────
+nextBtn.addEventListener("click", () => {
+  if (!validate()) return;
+  if (step === SECTIONS.length - 1) { submit(); return; }
+  step++; renderSection();
+});
+backBtn.addEventListener("click", () => { if (step > 0) { step--; renderSection(); } });
+
+load();
+if (!ENDPOINT) document.getElementById("preview-banner").hidden = false;
+renderSection();
+</script>
+</body>
+</html>
